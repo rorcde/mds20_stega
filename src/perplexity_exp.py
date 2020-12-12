@@ -42,12 +42,18 @@ def vlc(args, model, tokenizer, start_word, private_code, m = 10):
 def flc(args,model, tokenizer, start_word, private_code, m = 10):
     private_code = private_code.tolist()
     TOKEN_COUNT_LOG = int(np.log2(m))
-    generate_count = len(private_code) % TOKEN_COUNT_LOG
+    if TOKEN_COUNT_LOG > 0:
+        generate_count = len(private_code) % TOKEN_COUNT_LOG
+    else:
+        generate_count = 0
     if generate_count != 0:
         generate_count = TOKEN_COUNT_LOG - generate_count
     private_code = private_code + [0] * generate_count
-
-    max_idx = len(private_code) // TOKEN_COUNT_LOG
+    
+    if TOKEN_COUNT_LOG > 0:
+        max_idx = len(private_code) // TOKEN_COUNT_LOG
+    else:
+        max_idx = len(private_code) // m
     soft = torch.nn.Softmax(-1)
     
     input_ids = tokenizer.encode(start_word, 
