@@ -47,7 +47,7 @@ Replication of table $3$ from paper:
 | 6 | 57.72525323057455  | 11.123461032485856 | 4.184625685232456    |
 
 
-Discriminator script, which uses pretrained Transformer(e.g roberta-base) to find out if utterance was generated, depending on private code or not. Script iterates through folder of generated jsons. Each experiment is holded several times for for statistics collection. In our experiments we splited data in 70/30 proportion()results would be presented in future commits. Script outputs accuracy and ROC-AUC on test-set.
+Discriminator script, which uses pretrained Transformer(e.g roberta-base) to find out if utterance was generated, depending on private code or not. Script iterates through folder of generated jsons. Each experiment is holded several times for for statistics collection. In our experiments we splited data in 70/30 proportion(). Script outputs accuracy and ROC-AUC on test-set.
 
 ```console
 !python src/discriminator.py \
@@ -62,7 +62,14 @@ Discriminator script, which uses pretrained Transformer(e.g roberta-base) to fin
 --n_epoch 3 \
 --seed 42
 ```
-
+|    | FLC_acc | FLC_roc_auc | VLC_acc | VLC_roc_auc |
+|----|---------|-------------|---------|-------------|
+|  1 | 1.0     | 1.0         | 1.0     | 1.0         |
+|  2 | 0.91667 | 0.98484     | 0.90167 | 0.99485     |
+|  3 | 0.95333 | 0.99383     | 0.77667 | 0.95159     |
+| 4 |     985 | 0.99867     | 0.9375  | 0.98261     |
+| 5 | 0.98333 | 0.99596     |     965 | 0.99289     |
+| 6 | 0.98417 | 0.9987      | 0.9325  | 0.98431     |
 
 ---
 ---
