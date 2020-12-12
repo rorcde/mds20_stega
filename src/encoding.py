@@ -129,3 +129,4 @@ if __name__ == '__main__':
     )
     t = pbt.decode([0, 1, 1])
     print(pbt.encode(t))
+
