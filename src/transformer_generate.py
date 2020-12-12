@@ -1,9 +1,8 @@
 import numpy as np
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import torch
-import math
 
-from src.encoding import PerfectBinaryTreeWithoutProbs
+from encoding import PerfectBinaryTreeWithoutProbs
 
 TOKEN_COUNT = 16
 TOKEN_COUNT_LOG = int(np.log2(TOKEN_COUNT))
@@ -84,20 +83,46 @@ def decode(model, tokens):
     return result_bits
 
 
-if __name__ == '__main__':
-    model, tokenizer = init_model()
-    seq = [
-        1, 0, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 0,
-        1, 0, 0, 1
-    ]
-    text = generate(model, 'Hello', seq, tokenizer)
+def _test(bits_per_word, seq_len):
+    global TOKEN_COUNT
+    global TOKEN_COUNT_LOG
+    TOKEN_COUNT = bits_per_word
+    TOKEN_COUNT_LOG = int(np.log2(TOKEN_COUNT))
 
+    seq = list(
+        np.random.binomial(1, 0.5, seq_len)
+    )
+
+    model, tokenizer = init_model()
+    init_words = ['Hello', 'Are', 'Four', 'Good', 'World']
+    init_word = np.random.choice(init_words, 1)[0]
+
+    text = generate(model, init_word, seq, tokenizer)
     _tokens = tokenizer.encode(text, return_tensors='pt')
     decoded_seq = decode(model, _tokens)
 
-    assert np.array_equal(decoded_seq, seq)
+    assert np.array_equal(decoded_seq[:len(seq)], seq)
+    print(f'Bits per word: {bit_per_words} text: {text}')
 
-    print(text)
+
+if __name__ == '__main__':
+    model, tokenizer = init_model()
+
+    for bit_per_words in [2, 4, 8, 16, 32]:
+        _test(16, 70)
+
+    # seq = [
+    #     1, 0, 1, 1,
+    #     1, 1, 1, 1,
+    #     1, 1, 1, 1,
+    #     1, 1, 1, 0,
+    #     1, 0, 0, 1
+    # ]
+    # text = generate(model, 'Hello', seq, tokenizer)
+    #
+    # _tokens = tokenizer.encode(text, return_tensors='pt')
+    # decoded_seq = decode(model, _tokens)
+    #
+    # assert np.array_equal(decoded_seq[:len(seq)], seq)
+    #
+    # print(text)

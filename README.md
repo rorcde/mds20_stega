@@ -100,6 +100,12 @@ Generate text, using a pretrained model. The script itself does not solve the pr
 --cuda
 ```
 
+Run tests for transformer text generation. Hide random information into generated text\\
+with different bits per word
+```console
+!python transformer_generate.py
+```
+
 [Link to LSTM checkpoint](https://drive.google.com/file/d/1KALhEWSYobpav_eDgn58Otjob09fpy4m/view?usp=sharing) on Wikitext-2: $800$-dimensional vectors, $3$ LSTM hidden layers , $800$ LSTM units, $20$ epochs, Adam optimizer, lr = $1e{-4}$, linear scheduling.
 
 ---
