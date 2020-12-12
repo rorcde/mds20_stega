@@ -46,6 +46,25 @@ Replication of table $3$ from paper:
 | 5 | 35.79009683580573  | 9.008582112131112  | 3.62515860068878     |
 | 6 | 57.72525323057455  | 11.123461032485856 | 4.184625685232456    |
 
+
+Discriminator script, which uses pretrained Transformer(e.g roberta-base) to find out if utterance was generated, depending on private code or not. Script iterates through folder of generated jsons. Each experiment is holded several times for for statistics collection. In our experiments we splited data in 70/30 proportion()results would be presented in future commits. Script outputs accuracy and ROC-AUC on test-set.
+
+```console
+!python src/discriminator.py \
+--transformers_path roberta-base \
+--device cuda \
+--n_splits 1 \
+--test_size 0.3 \
+--data_folder experiment/texts/ \
+--non_modified_data experiment/generated.json \
+--result_path experiment/discriminator_stat.json \
+--checkpoint_path trained.pt \
+--n_epoch 3 \
+--seed 42
+```
+
+
+---
 ---
 Scripts for LSTM(failed experiments so far...):
 
@@ -114,7 +133,7 @@ with different bits per word
 |:---------------------------------------------------------------------:|:------:|
 |                         FLC encoding algorithm                        |    ✅   |
 |                            Code refactoring                           |    🌚   |
-|          Add attacks and their metrics(table 5 in the paper)          |    ❌   |
+|          Add attacks and their metrics(table 5 in the paper)          |    ✅   |
 |   Natural Language Generation metrics(perplexity, maybe some other)   |    ✅   |
 |                    New encoding scheme from Notion                    |    ❌   |
 | Improve Language model: train LSTM on a larger text corpus/ take GPT? |    ✅   |
