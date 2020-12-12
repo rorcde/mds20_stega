@@ -2,12 +2,8 @@ from utils import *
 from model import RNNModel, TransformerModel
 import data
 import argparse
-import json
-import os
 import torch
-import torch.nn as nn
 from torch import optim
-from pathlib import Path
 import logging
 logging.basicConfig(level=logging.INFO, filename='logs.log')
 
