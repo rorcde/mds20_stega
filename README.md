@@ -35,6 +35,17 @@ Script which generates texts via GPT2, encoding private message inside, using Fi
 bash scipts/perplexity_script.sh folder_to_save_exp number_of_generated_utt_per_each_experiment
 ```
 
+Replication of table $3$ from paper:
+
+| beats per token | FLC(perplexity)    | VLC(perplexity)    | beats per token(VLC) |
+|---|--------------------|--------------------|----------------------|
+| 1 | 3.8646043681999744 | 3.8366896652604727 | 1.0101010101010102   |
+| 2 | 7.205916203983316  | 5.0784163112266905 | 1.8108396863625664   |
+| 3 | 12.104180800837643 | 5.934022751040277  | 2.414234325583641    |
+| 4 | 21.022630540129374 | 7.320870174625539  | 3.044510747122937    |
+| 5 | 35.79009683580573  | 9.008582112131112  | 3.62515860068878     |
+| 6 | 57.72525323057455  | 11.123461032485856 | 4.184625685232456    |
+
 ---
 Scripts for LSTM(failed experiments so far...):
 
