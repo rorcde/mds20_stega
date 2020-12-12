@@ -1,3 +1,5 @@
 torch
 transformers
 tensorflow
+pandas
+numpy

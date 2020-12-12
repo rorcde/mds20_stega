@@ -10,7 +10,34 @@ This is the repository for the Models of Sequence Data 2020 Edition for the proj
 | &boxvr;&nbsp; [steganography-lstm-master](https://github.com/tbfang/steganography-lstm) | Torch code for another steganographic paper "Generating Steganographic Text with LSTMs" which uses another information-encoding algorithm for encrypted messages exchanging
 
 ---
-Scripts:
+Scripts for Transformers:
+
+Generate pure text via pretrained transformer(without steganography)
+```console
+!python src/generate_transformer.py \
+--model_path {PATH to HUGGINGFACE Model or your pretrained one} \
+--data_path data/wikitext-2 \
+--out_path experiment/generated.json \
+--seed 42 \
+--cuda \
+--utterances_to_generate 100 \
+--sentences_per_unique_start 5 \
+--do_sample \
+--top_k 0 \
+--top_p 0.8 \
+--max_length 50 \
+--min_length 15
+```
+
+Script which generates texts via GPT2, encoding private message inside, using Fixed Length Coding and Variable Length Coding. Experiments use a range of bits per token.
+
+```bash
+bash scipts/perplexity_script.sh folder_to_save_exp number_of_generated_utt_per_each_experiment
+```
+
+---
+Scripts for LSTM(failed experiments so far...):
+
 Train model on data corpus:
 ```console
 !python train.py \
@@ -68,9 +95,9 @@ Generate text, using a pretrained model. The script itself does not solve the pr
 
 |                              Tasks to do                              | Status |
 |:---------------------------------------------------------------------:|:------:|
-|                         FLC encoding algorithm                        |    ❌   |
-|                            Code refactoring                           |    ❌   |
+|                         FLC encoding algorithm                        |    ✅   |
+|                            Code refactoring                           |    🌚   |
 |          Add attacks and their metrics(table 5 in the paper)          |    ❌   |
-|   Natural Language Generation metrics(perplexity, maybe some other)   |    ❌   |
+|   Natural Language Generation metrics(perplexity, maybe some other)   |    ✅   |
 |                    New encoding scheme from Notion                    |    ❌   |
-| Improve Language model: train LSTM on a larger text corpus/ take GPT? |    ❌   |
+| Improve Language model: train LSTM on a larger text corpus/ take GPT? |    ✅   |
