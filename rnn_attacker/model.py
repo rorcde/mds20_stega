@@ -1,3 +1,16 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+from torchtext.datasets import IMDB
+from torchtext.data import Field, LabelField, BucketIterator
+
+import spacy
+
+import random
+import math
+import time
+
 class RNNStegaDetector(nn.Module):
 	def __init__(self, batch_size, output_size, hidden_size, vocab_size, n_layers,
               embedding_length, pad_idx, dropout, bidirectional=True):
