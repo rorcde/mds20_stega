@@ -8,12 +8,13 @@ import tqdm
 import json
 from transformers import AutoTokenizer, AutoModelWithLMHead
 
+
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', type=str, default='distilgpt2', 
+    parser.add_argument('--model_path', type=str, default='distilgpt2',
                         help='model checkpoint to use')
     parser.add_argument('--data_path', type=str, default='data/wikitext-2',
-                    help='location of the data corpus')
+                        help='location of the data corpus')
     parser.add_argument('--out_path', type=str, default='experiment/generated.json',
                         help='path to save generated text')
     parser.add_argument('--seed', type=int, default=42,
@@ -46,39 +47,42 @@ def main(args):
     random_seed(args.seed)
     if torch.cuda.is_available():
         if not args.cuda:
-            print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+            print(
+                "WARNING: You have a CUDA device, so you should probably run with --cuda")
     args.device = torch.device("cuda" if args.cuda else "cpu")
     most_common_first_words = get_popular_first_words(args)
-    
-    tokenizer = AutoTokenizer.from_pretrained(args.model_path)  
+
+    tokenizer = AutoTokenizer.from_pretrained(args.model_path)
     model = AutoModelWithLMHead.from_pretrained(args.model_path,
                                                 pad_token_id=tokenizer.eos_token_id
-                                               ).to(args.device)
+                                                ).to(args.device)
     model.eval()
     print('loaded model')
-    
+
     soft = torch.nn.Softmax(0)
     generated_strings = list()
-    
+
     for word_id, word in tqdm.tqdm(enumerate(most_common_first_words)):
         input_ids = tokenizer.encode(word, return_tensors='pt')
-        input_ids = input_ids.repeat(args.sentences_per_unique_start, 1).to(args.device)
+        input_ids = input_ids.repeat(
+            args.sentences_per_unique_start, 1).to(
+            args.device)
         output = model.generate(
-            input_ids, 
-            do_sample=args.do_sample, 
+            input_ids,
+            do_sample=args.do_sample,
             max_length=args.max_length,
             min_length=args.min_length,
-            top_k=args.top_k, 
+            top_k=args.top_k,
             top_p=args.top_p,
             repetition_penalty=args.repetition_penalty,
             temperature=args.temperature,
         )
         utt = [tokenizer.decode(i, skip_special_tokens=True) for i in output]
         generated_strings.extend(utt)
-        
+
     json.dump(generated_strings, Path(args.out_path).open('w'))
-    
-                
+
+
 if __name__ == '__main__':
     args = parse_arguments()
     main(args)

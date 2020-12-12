@@ -21,17 +21,20 @@ def random_seed(seed):
     torch.cuda.manual_seed(seed)
     random.seed(seed)
     np.random.seed(seed)
-    
+
+
 def get_popular_first_words(args):
     corpus = Corpus(args.data_path)
     ntokens = len(corpus.dictionary)
     idx2word = corpus.dictionary.idx2word
     most_common_first_words_ids = [i[0] for i in Counter(corpus.train.tolist()).most_common()
-                                  if idx2word[i[0]][0].isupper()][:args.utterances_to_generate]
+                                   if idx2word[i[0]][0].isupper()][:args.utterances_to_generate]
     return[corpus.dictionary.idx2word[i] for i in most_common_first_words_ids]
 
-def create_private_code(length = 100):
-    return torch.randint(0,2, (length,))
+
+def create_private_code(length=100):
+    return torch.randint(0, 2, (length,))
+
 
 def get_by_idx(seq, idx, TOKEN_COUNT_LOG):
     start_idx = int(TOKEN_COUNT_LOG * idx)
@@ -160,4 +163,3 @@ def train(args, model, optimizer, train_data, val_data, scheduler=None):
             print('model saved')
             logging.info('model saved')
             best_val_loss = val_loss
-
