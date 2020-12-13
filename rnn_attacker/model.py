@@ -1,16 +1,3 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
-
-from torchtext.datasets import IMDB
-from torchtext.data import Field, LabelField, BucketIterator
-
-import spacy
-
-import random
-import math
-import time
-
 class RNNStegaDetector(nn.Module):
 	def __init__(self, batch_size, output_size, hidden_size, vocab_size, n_layers,
               embedding_length, pad_idx, dropout, bidirectional=True):
@@ -41,20 +28,20 @@ class RNNStegaDetector(nn.Module):
                            bidirectional=bidirectional, 
                            dropout=dropout)
 		
-		self.label = nn.Linear(2*hidden_size, output_size)
+		self.fc = nn.Linear(2*hidden_size, output_size)
 		self.dropout = nn.Dropout(dropout)
 				
-	def forward(self, text, text_lengths):      
+	def forward(self, text):      
 		#text shape = (sent len, batch size)
 		embedded = self.dropout(self.embedding(text))
 		    
 		#pack sequence
-		packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, text_lengths)
+		# packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, text_lengths)
 		    
-		packed_output, (hidden, cell) = self.rnn(packed_embedded)
+		output, (hidden, cell) = self.rnn(embedded)
 		    
 		#unpack sequence
-		output, output_lengths = nn.utils.rnn.pad_packed_sequence(packed_output)
+		# output, output_lengths = nn.utils.rnn.pad_packed_sequence(packed_output)
 		    
 		hidden = self.dropout(torch.cat((hidden[-2,:,:], hidden[-1,:,:]), dim = 1))
   
