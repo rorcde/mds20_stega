@@ -72,6 +72,17 @@ Discriminator script, which uses pretrained Transformer(e.g roberta-base) to fin
 | 6 | 0.98417 | 0.9987      | 0.9325  | 0.98431     |
 
 ---
+RNN-based steganografic detector and it's results of the proportions of steganographic text generated that are correctly detected are presented here. The detector is bidirectional LSTM, with 2 layers and 0.5 dropout layer between them. For each type of an encoding scheme and each number of bits, the detector was trained from scratch, and then the final metrics Accuracy and ROC_AUC were obtained. 
+
+|    | FLC_acc | FLC_roc_auc | VLC_acc | VLC_roc_auc |
+|----|---------|-------------|---------|-------------|
+|  1 | 96.72   | 0.968       | 93.02   | 0.987       |
+|  2 | 89.06   | 0.992     | 87.97   | 0.982     |
+|  3 | 83.49   | 0.877     | 81.51  |  0.933     |
+| 4 |     86.56 | 0.888     | 85.73  | 0.950     |
+| 5 | 87.97  | 0.803     |   88.91 | 0.899     |
+| 6 | 96.09  | 0.96      | 82.97 | 0.802     |
+
 ---
 Scripts for LSTM(failed experiments so far...):
 
