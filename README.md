@@ -19,41 +19,41 @@ pip install -r requirements.txt
 ├── data
 │   ├── wikitext-2
 │   ├── generated_texts
-|   ├── gpt2medium_generated
-|   ├── bitstream.txt
+│   ├── gpt2medium_generated
+│   ├── bitstream.txt
 │   └── some other files
-|
+│   
 ├── rnn_attacker
 │   ├── data
-|   |   ├── ...
+│   │   ├── ...
 │   ├── generate_attacker_data_pipeline.ipynb
 │   ├── steganografic_detector_pipeline.ipynb
 │   └── models(checkpoints)
-|       ├──....
-
+│       ├──....
+│
 ├── src
 │   ├── utils
-|   |   ├──data.py
-|   |   ├──encoding.py
-|   |   ├──transformer_generate.py
-|   |   └──utils.py
-|   |
+│   │   ├──data.py
+│   │   ├──encoding.py
+│   │   ├──transformer_generate.py
+│   │   └──utils.py
+│   │
 │   ├── discriminator
-|   |   ├──utils_discriminator.py
-|   |   └──discriminator.py
+│   │   ├──utils_discriminator.py
+│   │   └──discriminator.py
 │   ├── lstm
-|   |   ├──model.py
-|   |   ├──generate.py
-|   |   ├──train.py
-|   |   └──steganography.py
-|   |
+│   │   ├──model.py
+│   │   ├──generate.py
+│   │   ├──train.py
+│   │   └──steganography.py
+│   │
 │   ├── generate_without_steganography.py
 │   └── perplexity_exp.py
-|
-|
+│   
+│
 ├── scripts
-|   └── perplexity_script.sh(bash script for generating text)
-|
+│   └── perplexity_script.sh(bash script for generating text)
+│
 └── repos
     ├── RNN-Stega
     ├── word_language_model	
