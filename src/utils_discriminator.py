@@ -5,12 +5,11 @@ import torch.nn as nn
 import numpy as np
 from torch.utils.data import Dataset
 from sklearn.model_selection import ShuffleSplit
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, f1_score
 from transformers import get_linear_schedule_with_warmup
 import random
 import re
 import pandas as pd
-
 
 def random_seed(seed):
     torch.manual_seed(seed)
@@ -18,24 +17,18 @@ def random_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
 
+def get_train_test_data(non_modified_data, modified_data, test_size=0.3, random_state=0):
 
-def get_train_test_data(non_modified_data, modified_data,
-                        test_size=0.3, random_state=0):
-
-    sss = ShuffleSplit(
-        n_splits=1,
-        test_size=test_size,
-        random_state=random_state)
-
+    sss = ShuffleSplit(n_splits=1, test_size=test_size, random_state=random_state)
+    
     train_index, test_index = next(iter(sss.split(non_modified_data)))
-    train_non_modified = np.array(non_modified_data)[
-        np.array(train_index)].tolist()
-    test_non_modified = np.array(non_modified_data)[
-        np.array(test_index)].tolist()
+    train_non_modified = np.array(non_modified_data)[np.array(train_index)].tolist()
+    test_non_modified = np.array(non_modified_data)[np.array(test_index)].tolist()
+    
     train_index, test_index = next(iter(sss.split(modified_data)))
     train_modified = np.array(modified_data)[np.array(train_index)].tolist()
     test_modified = np.array(modified_data)[np.array(test_index)].tolist()
-
+    
     return (train_non_modified, train_modified), (test_non_modified, test_modified)
 
 
@@ -70,8 +63,7 @@ class CustomTransform():
     def __call__(self, item):
         item_cp = item
         return torch.LongTensor(self.tokenizer.encode(item_cp, padding='max_length', max_length=self.max_len))[
-            :self.max_len]
-
+               :self.max_len]
 
 def train(model, batcher, args):
     device = torch.device(args.device)
@@ -107,8 +99,7 @@ def train(model, batcher, args):
 
                 predictions = logits.logits.argmax(1).tolist()
                 accuracy['all'] += len(predictions)
-                accuracy['true'] += sum([predictions[i] == target.tolist()[i]
-                                         for i in range(len(predictions))])
+                accuracy['true'] += sum([predictions[i] == target.tolist()[i] for i in range(len(predictions))])
                 all_target.extend(target.tolist())
                 all_pred_probs.extend(soft(logits.logits)[:, 1].tolist())
 
@@ -126,13 +117,10 @@ def train(model, batcher, args):
             phrase = f"Phase {phase} Epoch {epoch} | Accuracy {accuracy['true'] / accuracy['all']:.3f} | Loss {loss_ep / (batch_id + 1)} | ROC AUC {roc_auc_score(all_target, all_pred_probs)}"
             print(phrase)
 
-            acc_array[epoch - 1, ['train',
-                                  'dev'].index(phase)] = accuracy['true'] / accuracy['all']
+            acc_array[epoch - 1, ['train', 'dev'].index(phase)] = accuracy['true'] / accuracy['all']
             if phase != 'train':
-                if acc_array[epoch - 1, ['train',
-                                         'dev'].index(phase)] > best_acc:
-                    best_acc = acc_array[epoch - 1,
-                                         ['train', 'dev'].index(phase)]
+                if acc_array[epoch - 1, ['train', 'dev'].index(phase)] > best_acc:
+                    best_acc = acc_array[epoch - 1, ['train', 'dev'].index(phase)]
                     torch.save({'model_state_dict': model.state_dict(),
                                 'best_acc': best_acc},
                                args.checkpoint_path)
@@ -145,6 +133,7 @@ def evaluate(model, batcher, args):
     soft = nn.Softmax(dim=1)
     criterion = nn.NLLLoss()
     all_pred_probs = list()
+    all_predictions = list()
     all_target = list()
     loss_ep = 0
 
@@ -163,15 +152,20 @@ def evaluate(model, batcher, args):
 
         predictions = logits.logits.argmax(1).tolist()
         accuracy['all'] += len(predictions)
-        accuracy['true'] += sum([predictions[i] == target.tolist()[i]
-                                 for i in range(len(predictions))])
+        accuracy['true'] += sum([predictions[i] == target.tolist()[i] for i in range(len(predictions))])
         all_target.extend(target.tolist())
         all_pred_probs.extend(soft(logits.logits)[:, 1].tolist())
+        all_predictions.extend(predictions)
 
     total_accuracy = accuracy['true'] / accuracy['all']
     total_loss = loss_ep / (batch_id + 1)
     roc_auc = roc_auc_score(all_target, all_pred_probs)
-
+    f1score = f1_score(all_target, all_predictions, 'micro')
+        
     return {'acc': total_accuracy,
             'roc_auc': roc_auc,
-            'loss': total_loss}
+            'loss': total_loss, 
+            'f1score': f1score
+           }
+
+

@@ -3,3 +3,5 @@ transformers
 tensorflow
 pandas
 numpy
+spacy
+torchtext
