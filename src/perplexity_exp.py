@@ -1,7 +1,7 @@
 import argparse
 import torch
-from utils import random_seed, get_popular_first_words, create_private_code, get_by_idx
-from encoding import createNodes, createHuffmanTree, huffmanEncoding, PerfectBinaryTreeWithoutProbs
+from utils.utils import random_seed, get_popular_first_words, create_private_code, get_by_idx
+from utils.encoding import createNodes, createHuffmanTree, huffmanEncoding, PerfectBinaryTreeWithoutProbs
 from pathlib import Path
 import random
 import numpy as np
