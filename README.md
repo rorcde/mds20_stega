@@ -2,12 +2,23 @@
 This is the repository for the Models of Sequence Data 2020 Edition for the project [RNN-Stega: Linguistic Steganography Based on Recurrent Neural Networks](http://static.tongtianta.site/paper_pdf/899f6470-c222-11e9-9474-00163e08bb86.pdf)
 
 ---
-| Path  | Description
-| :---  | :----------
-| repos | existing implementation
-| &boxvr;&nbsp; [RNN-Stega](https://github.com/YangzlTHU/RNN-Stega) | Tensorflow implementation of RNN-Stega.
-| &boxvr;&nbsp; [word_language_model](https://github.com/pytorch/examples/tree/master/word_language_model) | Torch code for training language model and text generating.
-| &boxvr;&nbsp; [steganography-lstm-master](https://github.com/tbfang/steganography-lstm) | Torch code for another steganographic paper "Generating Steganographic Text with LSTMs" which uses another information-encoding algorithm for encrypted messages exchanging
+## Installation & Setup 
+
+```console
+git clone https://github.com/rodrigorivera/mds20_stega.git
+python3 -m venv rnnstega
+source rnnstega/bin/activate
+pip install -r requirements.txt
+```
+
+---
+## Structure of repo:
+
+```bat
+.
+```
+
+
 
 ---
 Scripts for Transformers:
@@ -35,7 +46,7 @@ Script which generates texts via GPT2, encoding private message inside, using Fi
 bash scipts/perplexity_script.sh folder_to_save_exp number_of_generated_utt_per_each_experiment
 ```
 
-Replication of table $3$ from paper:
+Replication of table 3 from paper:
 
 | beats per token | FLC(perplexity)    | VLC(perplexity)    | beats per token(VLC) |
 |---|--------------------|--------------------|----------------------|
@@ -97,6 +108,15 @@ RNN-based steganografic detector and it's results of the proportions of steganog
 | | 5 | 78.23 | 0.887     |   92.08 | 0.968     |
 | | 6 | 58.13 | 0.915      | 88.85 | 0.960     |
 
+
+
+Run tests for transformer text generation. Hide random information into generated text\\
+with different bits per word
+```console
+!python transformer_generate.py
+```
+
+---
 ---
 Scripts for LSTM(failed experiments so far...):
 
@@ -151,13 +171,17 @@ Generate text, using a pretrained model. The script itself does not solve the pr
 --cuda
 ```
 
-Run tests for transformer text generation. Hide random information into generated text\\
-with different bits per word
-```console
-!python transformer_generate.py
-```
+[Link to LSTM checkpoint](https://drive.google.com/file/d/1KALhEWSYobpav_eDgn58Otjob09fpy4m/view?usp=sharing) on Wikitext-2: $800$-dimensional vectors, 3 LSTM hidden layers , 800 LSTM units, 20 epochs, Adam optimizer, lr = 1e{-4}, linear scheduling.
 
-[Link to LSTM checkpoint](https://drive.google.com/file/d/1KALhEWSYobpav_eDgn58Otjob09fpy4m/view?usp=sharing) on Wikitext-2: $800$-dimensional vectors, $3$ LSTM hidden layers , $800$ LSTM units, $20$ epochs, Adam optimizer, lr = $1e{-4}$, linear scheduling.
+---
+Existing repositories, repositories with similar approaches.
+
+| Path  | Description
+| :---  | :----------
+| repos | existing implementation
+| &boxvr;&nbsp; [RNN-Stega](https://github.com/YangzlTHU/RNN-Stega) | Tensorflow implementation of RNN-Stega.
+| &boxvr;&nbsp; [word_language_model](https://github.com/pytorch/examples/tree/master/word_language_model) | Torch code for training language model and text generating.
+| &boxvr;&nbsp; [steganography-lstm-master](https://github.com/tbfang/steganography-lstm) | Torch code for another steganographic paper "Generating Steganographic Text with LSTMs" which uses another information-encoding algorithm for encrypted messages exchanging
 
 ---
 
